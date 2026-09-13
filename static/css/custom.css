@@ -30,6 +30,20 @@ body {
     text-align: center;
 }
 
+.installment-book-table th,
+.installment-book-table td {
+    min-width: 120px;
+    padding: 0.9rem 0.5rem;
+}
+
+@media (max-width: 576px) {
+    .installment-book-table .btn {
+        display: block;
+        width: 100%;
+        margin: 0.25rem 0;
+    }
+}
+
 .btn {
     font-weight: 500;
 }

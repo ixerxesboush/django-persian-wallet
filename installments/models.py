@@ -48,6 +48,7 @@ class InstallmentPayment(models.Model):
         verbose_name='قسط',
     )
     amount = models.PositiveIntegerField(verbose_name='مبلغ (تومان)')
+    due_date = models.DateField(null=True, blank=True, verbose_name='تاریخ سررسید')
     payment_date = models.DateTimeField(auto_now_add=True, verbose_name='تاریخ پرداخت')
     comment = models.TextField(blank=True, verbose_name='توضیحات')
 

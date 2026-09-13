@@ -1,0 +1,4 @@
+django>=4.2,<5.0
+python-decouple
+jdatetime
+python-dateutil
