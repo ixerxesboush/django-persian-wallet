@@ -1,0 +1,45 @@
+html, body {
+    direction: rtl;
+    font-family: 'Vazirmatn', sans-serif;
+    background-color: #f5f5f5;
+    color: #1f2937;
+}
+
+body {
+    min-height: 100vh;
+}
+
+.card {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+    border: none;
+    border-radius: 14px;
+}
+
+.navbar {
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+}
+
+.form-control,
+.form-select {
+    text-align: right;
+}
+
+.table th,
+.table td {
+    vertical-align: middle;
+    text-align: center;
+}
+
+.btn {
+    font-weight: 500;
+}
+
+.alert {
+    font-size: 0.98rem;
+}
+
+.page-title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}

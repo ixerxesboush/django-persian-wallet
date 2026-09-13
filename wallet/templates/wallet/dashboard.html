@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% load wallet_tags %}
+{% block title %}داشبورد{% endblock %}
+{% block content %}
+<div class="row g-4 mt-1">
+    <div class="col-lg-7">
+        <div class="card"><div class="card-body p-4">
+            <h2>داشبورد</h2>
+            <p><strong>نام:</strong> {{ user.get_full_name|default:user.username }}</p>
+            <p><strong>شناسه بین‌المللی:</strong> {{ user.international_id }}</p>
+            <div class="p-3 bg-light rounded"><h3 class="text-success mb-0">موجودی: {{ user.balance|toman }}</h3></div>
+            <div class="d-flex gap-2 flex-wrap mt-4">
+                <a href="{% url 'deposit' %}" class="btn btn-success">واریز</a>
+                <a href="{% url 'withdraw' %}" class="btn btn-danger">برداشت</a>
+                <a href="{% url 'installment_list' %}" class="btn btn-primary">مدیریت اقساط</a>
+            </div>
+        </div></div>
+        <div class="card mt-4"><div class="card-body">
+            <h4>آخرین تراکنش‌ها</h4>
+            {% for item in recent_transactions %}
+            <div class="d-flex justify-content-between border-bottom py-2">
+                <span>{{ item.timestamp|jalali_date }} - {{ item.get_type_display }}{% if item.comment %} - {{ item.comment }}{% endif %}</span>
+                <span class="{% if item.type == 'deposit' %}text-success{% else %}text-danger{% endif %}">{{ item.amount|toman }}</span>
+            </div>
+            {% empty %}<p class="text-muted">تراکنشی ثبت نشده است.</p>{% endfor %}
+        </div></div>
+    </div>
+    <div class="col-lg-5">
+        <div class="card"><div class="card-body"><h4>نسبت واریز و برداشت</h4><canvas id="walletChart"></canvas></div></div>
+        <div class="card mt-4"><div class="card-body"><h4>آخرین ورودها</h4>
+            {% for item in recent_logins %}<p class="border-bottom pb-2">{{ item.login_time|jalali_date }} - {{ item.ip_address|default:"نامشخص" }}</p>
+            {% empty %}<p class="text-muted">سابقه‌ای ثبت نشده است.</p>{% endfor %}
+        </div></div>
+    </div>
+</div>
+<script>
+new Chart(document.getElementById('walletChart'), {
+    type: 'pie',
+    data: {labels: ['واریزی‌ها', 'برداشتی‌ها'], datasets: [{data: [{{ deposit_total }}, {{ withdraw_total }}], backgroundColor: ['#198754', '#dc3545']}]},
+    options: {responsive: true}
+});
+</script>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}حذف حساب{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card mt-5 border-danger">
+            <div class="card-body p-4">
+                <h2 class="text-center text-danger mb-3">حذف حساب کاربری</h2>
+                <p class="text-center">برای حذف حساب، رمز عبور خود را وارد کنید.</p>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field.errors }}
+                            {{ field }}
+                        </div>
+                    {% endfor %}
+                    <button type="submit" class="btn btn-danger w-100">حذف حساب</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

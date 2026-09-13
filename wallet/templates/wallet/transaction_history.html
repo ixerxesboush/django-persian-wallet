@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load wallet_tags %}
+{% block title %}تاریخچه تراکنش‌ها{% endblock %}
+{% block content %}
+<div class="card"><div class="card-body">
+<h2>تاریخچه تراکنش‌ها</h2>
+{% for item in transactions %}
+<div class="receipt border rounded p-3 mb-2">
+    <div class="d-flex justify-content-between"><strong>{{ item.get_type_display }}</strong><span>{{ item.timestamp|jalali_date }}</span></div>
+    <div>مبلغ: <span class="{% if item.type == 'deposit' %}text-success{% else %}text-danger{% endif %}">{{ item.amount|toman }}</span></div>
+    <div>موجودی پس از تراکنش: {{ item.balance_after|toman }}</div>
+    {% if item.comment %}<div>توضیحات: {{ item.comment }}</div>{% endif %}
+</div>
+{% empty %}<p>تراکنشی ثبت نشده است.</p>{% endfor %}
+</div></div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block title %}ایجاد قسط جدید{% endblock %}
+{% block content %}
+<div class="row justify-content-center"><div class="col-md-6"><div class="card mt-4"><div class="card-body p-4">
+<h2>ایجاد قسط جدید</h2><form method="post">{% csrf_token %}{% for field in form %}<div class="mb-3"><label class="form-label">{{ field.label }}</label>{{ field.errors }}{{ field }}</div>{% endfor %}<button class="btn btn-primary w-100">ذخیره قسط</button></form>
+</div></div></div></div>
+{% endblock %}

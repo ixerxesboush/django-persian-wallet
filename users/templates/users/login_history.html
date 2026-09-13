@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% block title %}تاریخچه ورودها{% endblock %}
+{% load wallet_tags %}
+{% block content %}
+<div class="card"><div class="card-body"><h2>تاریخچه ورودها</h2>
+{% for item in history %}<div class="border-bottom py-3"><strong>{{ item.login_time|jalali_date }}</strong><span class="me-3">نشانی IP: {{ item.ip_address|default:"نامشخص" }}</span></div>
+{% empty %}<p>سابقه‌ای ثبت نشده است.</p>{% endfor %}
+</div></div>
+{% endblock %}

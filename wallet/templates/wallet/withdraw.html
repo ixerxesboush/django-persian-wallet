@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block title %}برداشت{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card mt-4">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">برداشت از کیف پول</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                            {{ field.errors }}{{ field }}
+                        </div>
+                    {% endfor %}
+                    <small class="text-muted">مبلغ را به تومان وارد کنید.</small>
+                    <button type="submit" class="btn btn-danger w-100 mt-3">برداشت</button>
+                </form>
+                <form method="post" action="{% url 'withdraw_max' %}" class="mt-2">{% csrf_token %}<button class="btn btn-outline-danger w-100">برداشت حداکثر موجودی</button></form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

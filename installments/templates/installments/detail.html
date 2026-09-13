@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% load wallet_tags %}
+{% block title %}{{ installment.name }}{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4"><h2>{{ installment.name }}</h2>
+<div class="d-flex gap-2">
+{% if installment.is_active %}<form method="post" action="{% url 'installment_pay' installment.pk %}">{% csrf_token %}<button class="btn btn-success">پرداخت قسط این ماه</button></form>{% endif %}
+<button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#overdueModal">⚠️ عدم توانایی پرداخت</button>
+</div></div>
+{% if installment.overdue_count %}<div class="alert alert-danger">شما {{ installment.overdue_count }} قسط معوقه دارید.</div>{% endif %}
+<div class="row g-3 mb-4">
+<div class="col-6 col-lg-3"><div class="card text-center"><div class="card-body"><small>تعداد پرداخت‌ها</small><h4>{{ payment_count }}</h4></div></div></div>
+<div class="col-6 col-lg-3"><div class="card text-center"><div class="card-body"><small>کل پرداخت شده</small><h4>{{ installment.paid_amount|toman }}</h4></div></div></div>
+<div class="col-6 col-lg-3"><div class="card text-center"><div class="card-body"><small>مانده بدهی</small><h4>{{ installment.remaining_amount|toman }}</h4></div></div></div>
+<div class="col-6 col-lg-3"><div class="card text-center"><div class="card-body"><small>مبلغ ماهانه</small><h4>{{ installment.monthly_amount|toman }}</h4></div></div></div>
+</div>
+<div class="row g-4"><div class="col-lg-7"><div class="card"><div class="card-body"><h4>روند پرداخت</h4><canvas id="paymentChart"></canvas></div></div></div><div class="col-lg-5"><div class="card"><div class="card-body"><h4>پرداخت و مانده</h4><canvas id="debtChart"></canvas></div></div></div></div>
+{% if overdue_rows %}<div class="card mt-4"><div class="card-body"><h4>اقساط معوقه</h4><p>مجموع معوقه: {{ overdue_total|toman }}</p>{% for row in overdue_rows %}<div class="border-bottom py-2 d-flex justify-content-between align-items-center flex-wrap gap-2"><span>{{ row.date }} - {{ row.item.reason|default:"بدون توضیح" }}</span>{% if row.item.is_resolved %}<span class="badge bg-success">پرداخت شده</span>{% else %}<form method="post" action="{% url 'resolve_overdue' installment.pk row.item.pk %}">{% csrf_token %}<button class="btn btn-sm btn-outline-success">پرداخت معوقه</button></form>{% endif %}</div>{% endfor %}</div></div>{% endif %}
+<div class="card mt-4"><div class="card-body"><h4>سوابق پرداخت</h4>{% for row in payment_rows %}<div class="border-bottom py-2">{{ row.date }} - {{ row.amount|toman }}{% if row.comment %} - {{ row.comment }}{% endif %}</div>{% empty %}<p>پرداختی ثبت نشده است.</p>{% endfor %}</div></div>
+<div class="modal fade" id="overdueModal" tabindex="-1"><div class="modal-dialog"><div class="modal-content"><div class="modal-header"><h5 class="modal-title">ثبت قسط معوقه</h5><button type="button" class="btn-close" data-bs-dismiss="modal"></button></div><form method="post" action="{% url 'mark_overdue' installment.pk %}">{% csrf_token %}<div class="modal-body"><p>آیا از عدم توانایی پرداخت این قسط اطمینان دارید؟</p><textarea name="reason" class="form-control" rows="3" placeholder="علت (اختیاری)"></textarea></div><div class="modal-footer"><button type="submit" class="btn btn-warning">ثبت معوقه</button></div></form></div></div></div>
+<script>
+new Chart(document.getElementById('paymentChart'), {type:'line', data:{labels:{{ chart_labels|safe }}, datasets:[{label:'پرداخت تجمعی', data:{{ chart_values|safe }}, borderColor:'#0d6efd', tension:.2}]}, options:{responsive:true}});
+new Chart(document.getElementById('debtChart'), {type:'pie', data:{labels:['پرداخت شده','مانده بدهی'], datasets:[{data:[{{ installment.paid_amount }},{{ installment.remaining_amount }}], backgroundColor:['#198754','#ffc107']}]}, options:{responsive:true}});
+</script>
+{% endblock %}

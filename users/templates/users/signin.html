@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}ورود{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-5">
+        <div class="card mt-5">
+            <div class="card-body p-4">
+                <h2 class="text-center mb-4">ورود</h2>
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="username" class="form-label">نام کاربری</label>
+                        <input type="text" name="username" id="username" class="form-control" placeholder="نام کاربری" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">رمز عبور</label>
+                        <input type="password" name="password" id="password" class="form-control" placeholder="رمز عبور" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">ورود</button>
+                </form>
+                <p class="text-center mt-3 mb-0">
+                    <a href="{% url 'signup' %}">ثبت نام نکرده‌اید؟ ایجاد حساب</a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
